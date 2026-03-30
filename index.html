@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP Semiconductor Policy 2024 — Assistant</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .chat-container {
+    width: 100%;
+    max-width: 780px;
+    height: 88vh;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1a3a6b, #2563eb);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .header-logo {
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .header-title { color: #fff; font-size: 17px; font-weight: 600; }
+  .header-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 2px; }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(52,211,153,0.2);
+    border: 1px solid rgba(52,211,153,0.5);
+    color: #34d399;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* Messages */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #f8fafc;
+  }
+  .messages::-webkit-scrollbar { width: 5px; }
+  .messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+  .msg { display: flex; gap: 10px; align-items: flex-start; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .msg.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0; margin-top: 2px;
+  }
+  .avatar.bot { background: linear-gradient(135deg, #1a3a6b, #2563eb); color: #fff; }
+  .avatar.user { background: #e2e8f0; }
+
+  .bubble {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .msg.bot .bubble {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    border-top-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .msg.user .bubble {
+    background: linear-gradient(135deg, #1a3a6b, #2563eb);
+    color: #fff;
+    border-top-right-radius: 4px;
+  }
+  .bubble strong { color: #1d4ed8; }
+  .msg.user .bubble strong { color: #bfdbfe; }
+  .bubble ul { margin: 8px 0 4px 18px; }
+  .bubble li { margin-bottom: 4px; color: #475569; }
+  .bubble p { margin: 4px 0; }
+
+  /* Typing */
+  .typing-dots {
+    display: flex; gap: 5px;
+    padding: 14px 18px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px; border-top-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    width: fit-content;
+  }
+  .typing-dots span {
+    width: 7px; height: 7px;
+    background: #94a3b8; border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: .2s; }
+  .typing-dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+  /* Suggested questions */
+  .suggestions {
+    padding: 0 24px 12px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    background: #f8fafc;
+    flex-shrink: 0;
+  }
+  .suggestions-label {
+    width: 100%;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+  .sq {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #1d4ed8;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .sq:hover { background: #eff6ff; border-color: #93c5fd; }
+
+  /* Input */
+  .input-area {
+    padding: 14px 20px 18px;
+    border-top: 1px solid #e2e8f0;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .input-row {
+    display: flex; gap: 10px; align-items: flex-end;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px 14px;
+    transition: border-color .2s;
+  }
+  .input-row:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+  textarea {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: #1e293b; font-family: 'Segoe UI', sans-serif;
+    font-size: 14px; line-height: 1.5;
+    resize: none; min-height: 22px; max-height: 100px; overflow-y: auto;
+  }
+  textarea::placeholder { color: #94a3b8; }
+  .send-btn {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #1a3a6b, #2563eb);
+    border: none; border-radius: 9px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; flex-shrink: 0;
+  }
+  .send-btn:hover { transform: scale(1.05); opacity: .9; }
+  .send-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .send-btn svg { width: 16px; height: 16px; }
+  .footer-note {
+    font-size: 11px; color: #94a3b8; text-align: center; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+
+  <div class="header">
+    <div class="header-logo">🏛️</div>
+    <div>
+      <div class="header-title">UP Semiconductor Policy Assistant</div>
+      <div class="header-sub">Uttar Pradesh Semiconductor Policy 2024 · Powered by Claude AI</div>
+    </div>
+    <div class="header-badge"><div class="dot"></div> Online</div>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="msg bot">
+      <div class="avatar bot">🏛️</div>
+      <div class="bubble">
+        <p>👋 <strong>Welcome!</strong> I am the <strong>UP Semiconductor Policy 2024 Assistant</strong>, here to help businessmen, investors, and entrepreneurs understand Uttar Pradesh's semiconductor policy.</p>
+        <p style="margin-top:8px">I can answer questions about:</p>
+        <ul>
+          <li>Subsidies and financial incentives</li>
+          <li>Eligibility criteria for businesses</li>
+          <li>Application process (Nivesh Mitra portal)</li>
+          <li>Land, infrastructure and power benefits</li>
+          <li>R&amp;D, skilling and patent support</li>
+        </ul>
+        <p style="margin-top:8px">How can I help you today?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="suggestions" id="suggestions">
+    <div class="suggestions-label">Suggested questions:</div>
+    <button class="sq" onclick="askQ(this.textContent)">What subsidies am I eligible for?</button>
+    <button class="sq" onclick="askQ(this.textContent)">How do I apply for benefits?</button>
+    <button class="sq" onclick="askQ(this.textContent)">What land rebate is available?</button>
+    <button class="sq" onclick="askQ(this.textContent)">What is the interest subsidy rate?</button>
+    <button class="sq" onclick="askQ(this.textContent)">Which unit types are covered?</button>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="userInput" rows="1"
+        placeholder="Ask anything about the UP Semiconductor Policy 2024..."
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)">
+      </textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="footer-note">Responses based on UP Semiconductor Policy 2024 · Verify details at invest.up.gov.in</div>
+  </div>
+
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are an expert assistant for the Uttar Pradesh Semiconductor Policy 2024. Help businessmen, investors, and entrepreneurs understand this policy. Always be specific with numbers and figures. Keep responses clear, structured, and practical.
+
+COMPLETE KNOWLEDGE BASE:
+
+POLICY OVERVIEW:
+- Notified: February 12, 2024 by Government of Uttar Pradesh
+- Department: IT & Electronics, Govt of UP
+- Nodal agencies: Invest UP (invest.up.gov.in), UP Electronics Corporation Ltd (UPLC)
+- Objective: Make UP a global semiconductor manufacturing hub; support Atmanirbhar Bharat
+- Unit types covered: FAB (Fabrication), ATMP (Assembly Testing Marking Packaging), OSAT (Outsourced Semiconductor Assembly & Testing), Compound Semiconductors, Display Fab, R&D Centres, Centres of Excellence (CoE)
+
+FISCAL INCENTIVES:
+1. Capital Subsidy: 50% ADDITIONAL subsidy on top of India Semiconductor Mission (ISM) central government subsidy — UP's exclusive state top-up
+2. Interest Subsidy: 5% per annum for 7 years; for investments up to Rs 200 Crore; max cap Rs 1 Crore per annum per unit; on loans from scheduled banks
+3. Land Rebate (ATMP/OSAT): 75% rebate on first 200 acres; 30% rebate on land beyond 200 acres
+4. Stamp Duty: 100% exemption on stamp duty and registration fees on purchase or lease of land
+5. SGST Exemption: Net State GST exemption for 10 years from commissioning
+6. Electricity Duty: 100% exemption for 10 years from commissioning
+7. Electricity Tariff: Rs 2 per unit reduction for 10 years
+8. Wheeling/Transmission Charges: 50% exemption for 25 years from commissioning
+9. EPF Reimbursement: 100% EPF reimbursement for UP domicile employees; max Rs 2,000/month/employee
+10. Skilling: Rs 60 Lakhs/year for 5 years for faculty training; Rs 20,000 per student internship; up to 500 students/year; Rs 1 Crore one-time for international expertise
+11. Patent: Reimbursement of domestic and international patent registration fees
+12. R&D/CoE: Subsidies for standalone R&D centres and Centres of Excellence
+13. Water: Concessions on water charges
+
+INFRASTRUCTURE BENEFITS:
+- Dual Power Grid: FAB units get dual grid; one grid cost reimbursed by Dept of IT & Electronics
+- Mission Critical Infrastructure: Water supply assurance, uninterrupted power commitment
+- Power Banking: Green/renewable energy provisions
+- Non-Disturbance: Government guarantee for business continuity
+- 24x7 Operations: Permission for round-the-clock three-shift operations
+- Self-Certification: Reduced compliance burden
+
+MEGA PROJECT INCENTIVES (approved January 7, 2026):
+- For investments of Rs 3,000 Crore or more
+- Customised additional incentives on case-by-case basis
+
+KEY LOCATIONS IN UP:
+- YEIDA (Yamuna Expressway Industrial Development Authority): 500 acres earmarked for semiconductors
+- EcoTech, Greater Noida
+- BIDA (upcoming greenfield city)
+- Proximity to Delhi-NCR and logistics hubs
+
+APPLICATION PROCESS:
+- Portal: Nivesh Mitra 3.0 (niveshmitra.up.gov.in) — Single Window Clearance
+- Steps: (1) Register on Nivesh Mitra portal (2) File application online (3) Submit documents digitally (4) Pay fees online (5) Track status in real-time (6) Receive clearances from all departments via one portal
+- For mega projects: Contact PMU under Invest UP directly
+
+RELATIONSHIP WITH CENTRAL GOVT:
+- Complements India Semiconductor Mission (ISM) under MeitY
+- UP's 50% additional capital subsidy is layered ON TOP of ISM central subsidy
+- Units approved under ISM get central subsidy first, then UP state top-up
+
+Keep answers 150-250 words. Use bullet points for listing benefits. Always quote exact figures. Be practical and business-focused.`;
+
+let busy = false;
+let conversationHistory = [];
+
+function autoResize(t) {
+  t.style.height = 'auto';
+  t.style.height = Math.min(t.scrollHeight, 100) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function askQ(q) {
+  document.getElementById('userInput').value = q;
+  document.getElementById('suggestions').style.display = 'none';
+  sendMessage();
+}
+
+function addMessage(role, html) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const av = document.createElement('div');
+  av.className = `avatar ${role}`;
+  av.textContent = role === 'bot' ? '🏛️' : '👤';
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.innerHTML = html;
+  div.appendChild(av);
+  div.appendChild(bub);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot'; div.id = 'typing';
+  const av = document.createElement('div');
+  av.className = 'avatar bot'; av.textContent = '🏛️';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  div.appendChild(av); div.appendChild(dots);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing');
+  if (el) el.remove();
+}
+
+function formatText(text) {
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/#{1,3} (.+)/g, '<strong style="display:block;margin:8px 0 4px;color:#1d4ed8">$1</strong>');
+  const lines = text.split('\n');
+  let html = '', inList = false;
+  for (let line of lines) {
+    line = line.trim();
+    if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
+    if (line.match(/^[-•]\s/)) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${line.slice(2)}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<p>${line}</p>`;
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+
+async function sendMessage() {
+  const inp = document.getElementById('userInput');
+  const btn = document.getElementById('sendBtn');
+  const text = inp.value.trim();
+  if (!text || busy) return;
+
+  busy = true;
+  btn.disabled = true;
+  inp.value = '';
+  inp.style.height = 'auto';
+
+  addMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  showTyping();
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+    hideTyping();
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      const reply = data.content[0].text;
+      conversationHistory.push({ role: 'assistant', content: reply });
+      addMessage('bot', formatText(reply));
+    } else {
+      const errMsg = data.error ? data.error.message : JSON.stringify(data); addMessage('bot', '<p>Error: ' + errMsg + '</p>');
+    }
+  } catch (err) {
+    hideTyping();
+    addMessage('bot', '<p>Connection error. Please check your internet and try again.</p>');
+  }
+
+  busy = false;
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
