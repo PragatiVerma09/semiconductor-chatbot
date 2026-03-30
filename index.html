@@ -6,426 +6,242 @@
 <title>UP Semiconductor Policy 2024 — Assistant</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f0f4f8;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
   }
-
   .chat-container {
     width: 100%;
     max-width: 780px;
     height: 88vh;
     background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
-
-  /* Header */
-  .header {
-    background: linear-gradient(135deg, #1a3a6b, #2563eb);
+  .chat-header {
+    background: linear-gradient(90deg, #0f3460, #e94560);
+    color: white;
     padding: 18px 24px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    flex-shrink: 0;
+    gap: 12px;
   }
-  .header-logo {
+  .header-icon {
     width: 42px; height: 42px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 20px;
   }
-  .header-title { color: #fff; font-size: 17px; font-weight: 600; }
-  .header-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 2px; }
-  .header-badge {
-    margin-left: auto;
-    background: rgba(52,211,153,0.2);
-    border: 1px solid rgba(52,211,153,0.5);
-    color: #34d399;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-  /* Messages */
-  .messages {
+  .header-text h2 { font-size: 16px; font-weight: 700; }
+  .header-text p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
+    padding: 20px;
+    background: #f8f9fc;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    background: #f8fafc;
+    gap: 14px;
   }
-  .messages::-webkit-scrollbar { width: 5px; }
-  .messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-
-  .msg { display: flex; gap: 10px; align-items: flex-start; animation: fadeIn .3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-  .msg.user { flex-direction: row-reverse; }
-
-  .avatar {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; flex-shrink: 0; margin-top: 2px;
-  }
-  .avatar.bot { background: linear-gradient(135deg, #1a3a6b, #2563eb); color: #fff; }
-  .avatar.user { background: #e2e8f0; }
-
-  .bubble {
-    max-width: 75%;
+  .message {
+    max-width: 78%;
     padding: 12px 16px;
     border-radius: 14px;
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.6;
+    white-space: pre-wrap;
   }
-  .msg.bot .bubble {
-    background: #fff;
+  .message.bot {
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    color: #1e293b;
-    border-top-left-radius: 4px;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-  .msg.user .bubble {
-    background: linear-gradient(135deg, #1a3a6b, #2563eb);
-    color: #fff;
-    border-top-right-radius: 4px;
+  .message.user {
+    background: linear-gradient(135deg, #0f3460, #e94560);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
   }
-  .bubble strong { color: #1d4ed8; }
-  .msg.user .bubble strong { color: #bfdbfe; }
-  .bubble ul { margin: 8px 0 4px 18px; }
-  .bubble li { margin-bottom: 4px; color: #475569; }
-  .bubble p { margin: 4px 0; }
-
-  /* Typing */
-  .typing-dots {
-    display: flex; gap: 5px;
-    padding: 14px 18px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px; border-top-left-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    width: fit-content;
+  .message-label {
+    font-size: 11px; font-weight: 600;
+    margin-bottom: 4px; opacity: 0.6;
   }
-  .typing-dots span {
-    width: 7px; height: 7px;
-    background: #94a3b8; border-radius: 50%;
+  .typing {
+    display: flex; gap: 5px; align-items: center;
+    padding: 14px 16px;
+  }
+  .typing span {
+    width: 8px; height: 8px;
+    background: #0f3460;
+    border-radius: 50%;
     animation: bounce 1.2s infinite;
   }
-  .typing-dots span:nth-child(2) { animation-delay: .2s; }
-  .typing-dots span:nth-child(3) { animation-delay: .4s; }
-  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
-
-  /* Suggested questions */
-  .suggestions {
-    padding: 0 24px 12px;
-    display: flex; flex-wrap: wrap; gap: 8px;
-    background: #f8fafc;
-    flex-shrink: 0;
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-8px); }
   }
-  .suggestions-label {
-    width: 100%;
-    font-size: 11px;
-    color: #94a3b8;
-    margin-bottom: 2px;
-  }
-  .sq {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    color: #1d4ed8;
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all .18s;
-  }
-  .sq:hover { background: #eff6ff; border-color: #93c5fd; }
-
-  /* Input */
-  .input-area {
-    padding: 14px 20px 18px;
+  .chat-input-area {
+    padding: 16px 20px;
+    background: white;
     border-top: 1px solid #e2e8f0;
-    background: #fff;
-    flex-shrink: 0;
-  }
-  .input-row {
     display: flex; gap: 10px; align-items: flex-end;
-    background: #f8fafc;
+  }
+  textarea {
+    flex: 1;
     border: 1.5px solid #e2e8f0;
     border-radius: 12px;
-    padding: 10px 14px;
-    transition: border-color .2s;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none; outline: none;
+    max-height: 120px;
+    transition: border-color 0.2s;
   }
-  .input-row:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
-  textarea {
-    flex: 1; background: transparent; border: none; outline: none;
-    color: #1e293b; font-family: 'Segoe UI', sans-serif;
-    font-size: 14px; line-height: 1.5;
-    resize: none; min-height: 22px; max-height: 100px; overflow-y: auto;
+  textarea:focus { border-color: #0f3460; }
+  button {
+    background: linear-gradient(135deg, #0f3460, #e94560);
+    color: white; border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer; font-size: 14px; font-weight: 600;
+    transition: opacity 0.2s;
   }
-  textarea::placeholder { color: #94a3b8; }
-  .send-btn {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, #1a3a6b, #2563eb);
-    border: none; border-radius: 9px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s; flex-shrink: 0;
+  button:hover { opacity: 0.88; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .suggestions {
+    padding: 0 20px 14px;
+    background: white;
+    display: flex; flex-wrap: wrap; gap: 8px;
   }
-  .send-btn:hover { transform: scale(1.05); opacity: .9; }
-  .send-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
-  .send-btn svg { width: 16px; height: 16px; }
-  .footer-note {
-    font-size: 11px; color: #94a3b8; text-align: center; margin-top: 8px;
+  .suggestion-chip {
+    background: #f0f4ff;
+    border: 1px solid #c7d7ff;
+    color: #0f3460;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
   }
+  .suggestion-chip:hover { background: #dce8ff; }
 </style>
 </head>
 <body>
-
 <div class="chat-container">
-
-  <div class="header">
-    <div class="header-logo">🏛️</div>
-    <div>
-      <div class="header-title">UP Semiconductor Policy Assistant</div>
-      <div class="header-sub">Uttar Pradesh Semiconductor Policy 2024 · Powered by Claude AI</div>
+  <div class="chat-header">
+    <div class="header-icon">🏭</div>
+    <div class="header-text">
+      <h2>UP Semiconductor Policy 2024 — Assistant</h2>
+      <p>Powered by Gemini AI · Ask about incentives, eligibility & more</p>
     </div>
-    <div class="header-badge"><div class="dot"></div> Online</div>
   </div>
 
-  <div class="messages" id="messages">
-    <div class="msg bot">
-      <div class="avatar bot">🏛️</div>
-      <div class="bubble">
-        <p>👋 <strong>Welcome!</strong> I am the <strong>UP Semiconductor Policy 2024 Assistant</strong>, here to help businessmen, investors, and entrepreneurs understand Uttar Pradesh's semiconductor policy.</p>
-        <p style="margin-top:8px">I can answer questions about:</p>
-        <ul>
-          <li>Subsidies and financial incentives</li>
-          <li>Eligibility criteria for businesses</li>
-          <li>Application process (Nivesh Mitra portal)</li>
-          <li>Land, infrastructure and power benefits</li>
-          <li>R&amp;D, skilling and patent support</li>
-        </ul>
-        <p style="margin-top:8px">How can I help you today?</p>
-      </div>
+  <div class="chat-messages" id="messages">
+    <div class="message bot">
+      <div class="message-label">🤖 Assistant</div>
+      Welcome! I'm your dedicated assistant for the <strong>Uttar Pradesh Semiconductor Policy 2024</strong>.<br><br>
+      I can help you with investment incentives, eligibility criteria, land allotment, subsidies, and more.<br><br>
+      What would you like to know?
     </div>
   </div>
 
   <div class="suggestions" id="suggestions">
-    <div class="suggestions-label">Suggested questions:</div>
-    <button class="sq" onclick="askQ(this.textContent)">What subsidies am I eligible for?</button>
-    <button class="sq" onclick="askQ(this.textContent)">How do I apply for benefits?</button>
-    <button class="sq" onclick="askQ(this.textContent)">What land rebate is available?</button>
-    <button class="sq" onclick="askQ(this.textContent)">What is the interest subsidy rate?</button>
-    <button class="sq" onclick="askQ(this.textContent)">Which unit types are covered?</button>
+    <span class="suggestion-chip" onclick="useChip(this)">What incentives are available?</span>
+    <span class="suggestion-chip" onclick="useChip(this)">Who is eligible to apply?</span>
+    <span class="suggestion-chip" onclick="useChip(this)">How does UP compare to other states?</span>
+    <span class="suggestion-chip" onclick="useChip(this)">What is the investment target?</span>
   </div>
 
-  <div class="input-area">
-    <div class="input-row">
-      <textarea id="userInput" rows="1"
-        placeholder="Ask anything about the UP Semiconductor Policy 2024..."
-        onkeydown="handleKey(event)"
-        oninput="autoResize(this)">
-      </textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
-      </button>
-    </div>
-    <div class="footer-note">Responses based on UP Semiconductor Policy 2024 · Verify details at invest.up.gov.in</div>
+  <div class="chat-input-area">
+    <textarea id="userInput" rows="1" placeholder="Ask about UP Semiconductor Policy..."></textarea>
+    <button id="sendBtn" onclick="sendMessage()">Send ➤</button>
   </div>
-
 </div>
 
 <script>
-const SYSTEM_PROMPT = `You are an expert assistant for the Uttar Pradesh Semiconductor Policy 2024. Help businessmen, investors, and entrepreneurs understand this policy. Always be specific with numbers and figures. Keep responses clear, structured, and practical.
+  const history = [];
 
-COMPLETE KNOWLEDGE BASE:
-
-POLICY OVERVIEW:
-- Notified: February 12, 2024 by Government of Uttar Pradesh
-- Department: IT & Electronics, Govt of UP
-- Nodal agencies: Invest UP (invest.up.gov.in), UP Electronics Corporation Ltd (UPLC)
-- Objective: Make UP a global semiconductor manufacturing hub; support Atmanirbhar Bharat
-- Unit types covered: FAB (Fabrication), ATMP (Assembly Testing Marking Packaging), OSAT (Outsourced Semiconductor Assembly & Testing), Compound Semiconductors, Display Fab, R&D Centres, Centres of Excellence (CoE)
-
-FISCAL INCENTIVES:
-1. Capital Subsidy: 50% ADDITIONAL subsidy on top of India Semiconductor Mission (ISM) central government subsidy — UP's exclusive state top-up
-2. Interest Subsidy: 5% per annum for 7 years; for investments up to Rs 200 Crore; max cap Rs 1 Crore per annum per unit; on loans from scheduled banks
-3. Land Rebate (ATMP/OSAT): 75% rebate on first 200 acres; 30% rebate on land beyond 200 acres
-4. Stamp Duty: 100% exemption on stamp duty and registration fees on purchase or lease of land
-5. SGST Exemption: Net State GST exemption for 10 years from commissioning
-6. Electricity Duty: 100% exemption for 10 years from commissioning
-7. Electricity Tariff: Rs 2 per unit reduction for 10 years
-8. Wheeling/Transmission Charges: 50% exemption for 25 years from commissioning
-9. EPF Reimbursement: 100% EPF reimbursement for UP domicile employees; max Rs 2,000/month/employee
-10. Skilling: Rs 60 Lakhs/year for 5 years for faculty training; Rs 20,000 per student internship; up to 500 students/year; Rs 1 Crore one-time for international expertise
-11. Patent: Reimbursement of domestic and international patent registration fees
-12. R&D/CoE: Subsidies for standalone R&D centres and Centres of Excellence
-13. Water: Concessions on water charges
-
-INFRASTRUCTURE BENEFITS:
-- Dual Power Grid: FAB units get dual grid; one grid cost reimbursed by Dept of IT & Electronics
-- Mission Critical Infrastructure: Water supply assurance, uninterrupted power commitment
-- Power Banking: Green/renewable energy provisions
-- Non-Disturbance: Government guarantee for business continuity
-- 24x7 Operations: Permission for round-the-clock three-shift operations
-- Self-Certification: Reduced compliance burden
-
-MEGA PROJECT INCENTIVES (approved January 7, 2026):
-- For investments of Rs 3,000 Crore or more
-- Customised additional incentives on case-by-case basis
-
-KEY LOCATIONS IN UP:
-- YEIDA (Yamuna Expressway Industrial Development Authority): 500 acres earmarked for semiconductors
-- EcoTech, Greater Noida
-- BIDA (upcoming greenfield city)
-- Proximity to Delhi-NCR and logistics hubs
-
-APPLICATION PROCESS:
-- Portal: Nivesh Mitra 3.0 (niveshmitra.up.gov.in) — Single Window Clearance
-- Steps: (1) Register on Nivesh Mitra portal (2) File application online (3) Submit documents digitally (4) Pay fees online (5) Track status in real-time (6) Receive clearances from all departments via one portal
-- For mega projects: Contact PMU under Invest UP directly
-
-RELATIONSHIP WITH CENTRAL GOVT:
-- Complements India Semiconductor Mission (ISM) under MeitY
-- UP's 50% additional capital subsidy is layered ON TOP of ISM central subsidy
-- Units approved under ISM get central subsidy first, then UP state top-up
-
-Keep answers 150-250 words. Use bullet points for listing benefits. Always quote exact figures. Be practical and business-focused.`;
-
-let busy = false;
-let conversationHistory = [];
-
-function autoResize(t) {
-  t.style.height = 'auto';
-  t.style.height = Math.min(t.scrollHeight, 100) + 'px';
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-
-function askQ(q) {
-  document.getElementById('userInput').value = q;
-  document.getElementById('suggestions').style.display = 'none';
-  sendMessage();
-}
-
-function addMessage(role, html) {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  const av = document.createElement('div');
-  av.className = `avatar ${role}`;
-  av.textContent = role === 'bot' ? '🏛️' : '👤';
-  const bub = document.createElement('div');
-  bub.className = 'bubble';
-  bub.innerHTML = html;
-  div.appendChild(av);
-  div.appendChild(bub);
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function showTyping() {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg bot'; div.id = 'typing';
-  const av = document.createElement('div');
-  av.className = 'avatar bot'; av.textContent = '🏛️';
-  const dots = document.createElement('div');
-  dots.className = 'typing-dots';
-  dots.innerHTML = '<span></span><span></span><span></span>';
-  div.appendChild(av); div.appendChild(dots);
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function hideTyping() {
-  const el = document.getElementById('typing');
-  if (el) el.remove();
-}
-
-function formatText(text) {
-  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  text = text.replace(/#{1,3} (.+)/g, '<strong style="display:block;margin:8px 0 4px;color:#1d4ed8">$1</strong>');
-  const lines = text.split('\n');
-  let html = '', inList = false;
-  for (let line of lines) {
-    line = line.trim();
-    if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
-    if (line.match(/^[-•]\s/)) {
-      if (!inList) { html += '<ul>'; inList = true; }
-      html += `<li>${line.slice(2)}</li>`;
-    } else {
-      if (inList) { html += '</ul>'; inList = false; }
-      html += `<p>${line}</p>`;
-    }
-  }
-  if (inList) html += '</ul>';
-  return html;
-}
-
-async function sendMessage() {
-  const inp = document.getElementById('userInput');
-  const btn = document.getElementById('sendBtn');
-  const text = inp.value.trim();
-  if (!text || busy) return;
-
-  busy = true;
-  btn.disabled = true;
-  inp.value = '';
-  inp.style.height = 'auto';
-
-  addMessage('user', text);
-  conversationHistory.push({ role: 'user', content: text });
-  showTyping();
-
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: conversationHistory
-      })
-    });
-
-    const data = await response.json();
-    hideTyping();
-
-    if (data.content && data.content[0] && data.content[0].text) {
-      const reply = data.content[0].text;
-      conversationHistory.push({ role: 'assistant', content: reply });
-      addMessage('bot', formatText(reply));
-    } else {
-      const errMsg = data.error ? data.error.message : JSON.stringify(data); addMessage('bot', '<p>Error: ' + errMsg + '</p>');
-    }
-  } catch (err) {
-    hideTyping();
-    addMessage('bot', '<p>Connection error. Please check your internet and try again.</p>');
+  function useChip(el) {
+    document.getElementById('userInput').value = el.textContent;
+    sendMessage();
   }
 
-  busy = false;
-  btn.disabled = false;
-}
+  document.getElementById('userInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    document.getElementById('suggestions').style.display = 'none';
+    appendMessage('user', message);
+    input.value = '';
+
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.disabled = true;
+    const typingEl = appendTyping();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history })
+      });
+
+      const data = await res.json();
+      typingEl.remove();
+
+      const reply = data.reply || data.error || 'Something went wrong.';
+      appendMessage('bot', reply);
+
+      history.push({ role: 'user', content: message });
+      history.push({ role: 'assistant', content: reply });
+
+    } catch (err) {
+      typingEl.remove();
+      appendMessage('bot', '⚠️ Error connecting to server. Please try again.');
+    }
+
+    sendBtn.disabled = false;
+  }
+
+  function appendMessage(role, text) {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.innerHTML = `<div class="message-label">${role === 'user' ? '👤 You' : '🤖 Assistant'}</div>${text}`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
+
+  function appendTyping() {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'message bot';
+    div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
 </script>
 </body>
 </html>
