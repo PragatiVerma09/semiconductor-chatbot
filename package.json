@@ -1,5 +1,5 @@
 {
-  "name": "up-semiconductor-chatbot",
+  "name": "semiconductor-chatbot",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
